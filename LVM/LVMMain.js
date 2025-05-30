@@ -1,0 +1,1 @@
+console.log("this will contain the main VM code that will interpret the bytecode that will come from the compiler")

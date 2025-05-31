@@ -2,46 +2,47 @@ const KEYWORDS = new Set(["set", "consolePrint"]);
 const OPERATORS = new Set(["=", "+", "-", "*", "/", "^"]);
 const PUNCTUATION = new Set(["(", ")"]);
 
-function lynxTokenizer(input){
-    const inputLength = input.length;
-    let iterator = 0;
-    const tokens = [];
-    let currentToken = "";
-
-
-
-    while(iterator < inputLength){
-        
-        if(input[iterator] === " "){
-            while(input[iterator] === " ") iterator++;
-            
-            
-            if(KEYWORDS.has(currentToken)){
-                tokens.push({type: "KEYWORD", value: currentToken});
-            } else if(OPERATORS.has(currentToken)){
-                tokens.push({type: "OPERATOR", value: currentToken });
-            } else if(!isNaN(currentToken)){
-                tokens.push({type: "NUMBER", value: Number(currentToken)});
-            } else{
-                tokens.push({type: "IDENTFIER", value: currentToken});
-            }
-            
-
-
-            currentToken="";
-            continue;
-        }
-        currentToken+=input[iterator];
-        iterator++;
-    }
-    if(currentToken.length > 0) parseArray.push(currentToken);
-
-    console.log(tokens);
-
-
+function classifyToken(token) {
+  if (KEYWORDS.has(token)) {
+    return { type: "KEYWORD", value: token };
+  } else if (OPERATORS.has(token)) {
+    return { type: "OPERATOR", value: token };
+  } else if (!isNaN(token)) {
+    return { type: "NUMBER", value: Number(token) };
+  } else {
+    return { type: "IDENTIFIER", value: token };
+  }
 }
 
+function lynxTokenizer(input) {
+  const tokens = [];
+  let currentToken = "";
 
-const input = "set    height = 12   "
+  for (let i = 0; i < input.length; i++) {
+    const char = input[i];
 
+    if (char === " ") {
+      if (currentToken.length > 0) {
+        tokens.push(classifyToken(currentToken));
+        currentToken = "";
+      }
+    } else if (PUNCTUATION.has(char)) {
+      if (currentToken.length > 0) {
+        tokens.push(classifyToken(currentToken));
+        currentToken = "";
+      }
+      tokens.push({ type: "PUNCTUATION", value: char });
+    } else {
+      currentToken += char;
+    }
+  }
+
+  if (currentToken.length > 0) {
+    tokens.push(classifyToken(currentToken));
+  }
+
+  console.log(tokens);
+}
+
+const input = "set weight = 23";
 lynxTokenizer(input);

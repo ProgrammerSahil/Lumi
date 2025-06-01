@@ -17,9 +17,32 @@ function classifyToken(token) {
 function lynxTokenizer(input) {
   const tokens = [];
   let currentToken = "";
+  let inString = false;
 
   for (let i = 0; i < input.length; i++) {
     const char = input[i];
+
+    if (char === '"') {
+      if (inString) {
+        // End of string
+        tokens.push({ type: "STRING", value: currentToken });
+        currentToken = "";
+        inString = false;
+      } else {
+        // Start of string
+        if (currentToken.length > 0) {
+          tokens.push(classifyToken(currentToken));
+          currentToken = "";
+        }
+        inString = true;
+      }
+      continue;
+    }
+
+    if (inString) {
+      currentToken += char;
+      continue;
+    }
 
     if (char === " ") {
       if (currentToken.length > 0) {
@@ -44,5 +67,12 @@ function lynxTokenizer(input) {
   console.log(tokens);
 }
 
-const input = "set weight = 23";
+const input = `
+set height = 180
+set name = "Sahil Udar"
+consolePrint(height)
+`
+  .trim()
+  .replace(/\n/g, " ");
+
 lynxTokenizer(input);

@@ -26,19 +26,19 @@ function lynxCompiler(tokenList) {
         program[i] = {
           type: "assignment",
           variableName: program[i][1].value,
-          data: [...program[i]]
+          expression: program[i].slice(3)
         }
         break;
       case "consolePrint":
         program[i] = {
           type: "functionCall",
           functionName: program[i][0].value,
-          data: [...program[i]]
+          arguments: program[i].slice(2, -1)
         }
     }
   }
 
-  console.log(JSON.stringify(program, null, 2));
+  console.log(JSON.stringify(program, null, 3));
 
   
 
@@ -47,14 +47,20 @@ function lynxCompiler(tokenList) {
 }
 
 const tokens = [
-  { type: "KEYWORD", value: "set" },
-  { type: "IDENTIFIER", value: "height" },
-  { type: "OPERATOR", value: "=" },
-  { type: "NUMBER", value: 180 },
-  { type: "KEYWORD", value: "consolePrint" },
-  { type: "PUNCTUATION", value: "(" },
-  { type: "IDENTIFIER", value: "height" },
-  { type: "PUNCTUATION", value: ")" },
+  { type: 'KEYWORD', value: 'set' },
+  { type: 'IDENTIFIER', value: 'height' },
+  { type: 'OPERATOR', value: '=' },
+  { type: 'NUMBER', value: 180 },
+  { type: 'OPERATOR', value: '+' },
+  { type: 'NUMBER', value: 12 },
+  { type: 'KEYWORD', value: 'set' },
+  { type: 'IDENTIFIER', value: 'name' },
+  { type: 'OPERATOR', value: '=' },
+  { type: 'STRING', value: 'Sahil Udar' },
+  { type: 'KEYWORD', value: 'consolePrint' },
+  { type: 'PUNCTUATION', value: '(' },
+  { type: 'IDENTIFIER', value: 'height' },
+  { type: 'PUNCTUATION', value: ')' }
 ];
 
 lynxCompiler(tokens);

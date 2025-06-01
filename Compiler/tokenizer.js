@@ -24,12 +24,10 @@ function lynxTokenizer(input) {
 
     if (char === '"') {
       if (inString) {
-        // End of string
         tokens.push({ type: "STRING", value: currentToken });
         currentToken = "";
         inString = false;
       } else {
-        // Start of string
         if (currentToken.length > 0) {
           tokens.push(classifyToken(currentToken));
           currentToken = "";
@@ -44,17 +42,18 @@ function lynxTokenizer(input) {
       continue;
     }
 
-    if (char === " ") {
+    if (OPERATORS.has(char) || PUNCTUATION.has(char)) {
       if (currentToken.length > 0) {
         tokens.push(classifyToken(currentToken));
         currentToken = "";
       }
-    } else if (PUNCTUATION.has(char)) {
+      const type = OPERATORS.has(char) ? "OPERATOR" : "PUNCTUATION";
+      tokens.push({ type, value: char });
+    } else if (char === " ") {
       if (currentToken.length > 0) {
         tokens.push(classifyToken(currentToken));
         currentToken = "";
       }
-      tokens.push({ type: "PUNCTUATION", value: char });
     } else {
       currentToken += char;
     }
@@ -68,7 +67,7 @@ function lynxTokenizer(input) {
 }
 
 const input = `
-set height = 180
+set height = 180+12
 set name = "Sahil Udar"
 consolePrint(height)
 `

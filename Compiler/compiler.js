@@ -20,7 +20,29 @@ function lynxCompiler(tokenList) {
     program.push([...currentStack]);
   }
 
-  console.log(program);
+  for(let i=0; i<program.length; i++){
+    switch(program[i][0].value){
+      case "set":
+        program[i] = {
+          type: "assignment",
+          variableName: program[i][1].value,
+          data: [...program[i]]
+        }
+        break;
+      case "consolePrint":
+        program[i] = {
+          type: "functionCall",
+          functionName: program[i][0].value,
+          data: [...program[i]]
+        }
+    }
+  }
+
+  console.log(JSON.stringify(program, null, 2));
+
+  
+
+  
 
 }
 

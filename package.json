@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "testVM": "node LVM/LVMMain.js",
-    "testTokenizer": "node Compiler/tokenizer.js"
+    "testTokenizer": "node Compiler/tokenizer.js",
+    "testCompiler" : "node Compiler/compiler.js"
   },
   "repository": {
     "type": "git",

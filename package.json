@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "LynxCompilerBackend",
   "main": "index.js",
+
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "testVM": "node LVM/LVMMain.js",
     "testTokenizer": "node Compiler/tokenizer.js",
     "testCompiler" : "node Compiler/compiler.js",
-    "testbytecodeGen" : "node Compiler/bytecodeGenerator.js"
+    "testbytecodeGen" : "node Compiler/bytecodeGenerator.js",
+    "test" : "node testing.js"
   },
   "repository": {
     "type": "git",

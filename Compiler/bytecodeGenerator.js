@@ -1,4 +1,4 @@
-function bydecodeGenerator(compiledCode) {
+function bytecodeGenerator(compiledCode) {
   let pointer = 0;
   const bytecodeOutput = [];
 
@@ -44,48 +44,8 @@ function bydecodeGenerator(compiledCode) {
     pointer++;
   }
 
-  console.log(bytecodeOutput);
+  return bytecodeOutput;
+
 }
 
-const compiledCode = [
-  {
-    type: "assignment",
-    variableName: "height",
-    expression: [
-      {
-        type: "NUMBER",
-        value: 180,
-      },
-      {
-        type: "NUMBER",
-        value: 12,
-      },
-      {
-        type: "OPERATOR",
-        value: "+",
-      },
-    ],
-  },
-  {
-    type: "assignment",
-    variableName: "name",
-    expression: [
-      {
-        type: "STRING",
-        value: "Sahil Udar",
-      },
-    ],
-  },
-  {
-    type: "functionCall",
-    functionName: "consolePrint",
-    arguments: [
-      {
-        type: "IDENTIFIER",
-        value: "height",
-      },
-    ],
-  },
-];
-
-bydecodeGenerator(compiledCode);
+export default bytecodeGenerator;

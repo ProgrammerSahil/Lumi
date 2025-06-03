@@ -49,7 +49,7 @@ function lynxTokenizer(input) {
       }
       const type = OPERATORS.has(char) ? "OPERATOR" : "PUNCTUATION";
       tokens.push({ type, value: char });
-    } else if (char === " ") {
+    } else if (/\s/.test(char)){
       if (currentToken.length > 0) {
         tokens.push(classifyToken(currentToken));
         currentToken = "";
@@ -63,15 +63,7 @@ function lynxTokenizer(input) {
     tokens.push(classifyToken(currentToken));
   }
 
-  console.log(tokens);
+  return tokens;
 }
 
-const input = `
-set height = 180+12
-set name = "Sahil Udar"
-consolePrint(height)
-`
-  .trim()
-  .replace(/\n/g, " ");
-
-lynxTokenizer(input);
+export default lynxTokenizer;

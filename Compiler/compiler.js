@@ -79,7 +79,8 @@ function lynxCompiler(tokenList) {
     }
   }
 
-  console.log(JSON.stringify(program, null, 3));
+
+  return program;
 
   
 
@@ -87,21 +88,6 @@ function lynxCompiler(tokenList) {
 
 }
 
-const tokens = [
-  { type: 'KEYWORD', value: 'set' },
-  { type: 'IDENTIFIER', value: 'height' },
-  { type: 'OPERATOR', value: '=' },
-  { type: 'NUMBER', value: 180 },
-  { type: 'OPERATOR', value: '+' },
-  { type: 'NUMBER', value: 12 },
-  { type: 'KEYWORD', value: 'set' },
-  { type: 'IDENTIFIER', value: 'name' },
-  { type: 'OPERATOR', value: '=' },
-  { type: 'STRING', value: 'Sahil Udar' },
-  { type: 'KEYWORD', value: 'consolePrint' },
-  { type: 'PUNCTUATION', value: '(' },
-  { type: 'IDENTIFIER', value: 'height' },
-  { type: 'PUNCTUATION', value: ')' }
-];
 
-lynxCompiler(tokens);
+
+export default lynxCompiler

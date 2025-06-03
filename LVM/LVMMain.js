@@ -43,13 +43,13 @@ function LVMExec(bytecode) {
         break;
       case "STORE":
         const value = stack.pop();
-        memory[bytecode.name] = value;
+        memory[instr.name] = value;
         break;
       case "LOAD":
-        if (!(bytecode.name in memory)) {
-          throw new Error(`Undeclared Variable: ${bytecode.value}`);
+        if (!(instr.name in memory)) {
+          throw new Error(`Undeclared Variable: ${instr.name}`); 
         }
-        stack.push(memory[bytecode.name]);
+        stack.push(memory[instr.name]); 
         break;
       case "HALT":
         return;
@@ -61,15 +61,4 @@ function LVMExec(bytecode) {
   }
 }
 
-const program = [
-  { op: 'PUSH', value: 180 },
-  { op: 'PUSH', value: 12 },
-  { op: 'ADD' },
-  { op: 'STORE', name: 'height' },
-  { op: 'PUSH', value: 'Sahil Udar' },
-  { op: 'STORE', name: 'name' },
-  { op: 'LOAD', name: 'height' },
-  { op: 'PRINT' }
-];
-
-LVMExec(program);
+export default LVMExec;

@@ -2,6 +2,47 @@ const KEYWORDS = new Set(["set", "consolePrint"]);
 const OPERATORS = new Set(["=", "+", "-", "*", "/", "^"]);
 const PUNCTUATION = new Set(["(", ")"]);
 
+function parseExpression(tokens) {
+  const output = [];
+  const operationStack = [];
+  const precedence = {
+    '+': 1,
+    '-': 1,
+    '*': 2,
+    '/': 2,
+    '^': 3
+  };
+
+  for (let token of tokens) {
+    if (token.type === "NUMBER" || token.type === "IDENTIFIER") {
+      output.push(token);
+    } else if (token.type === "PUNCTUATION" && token.value === "(") {
+      operationStack.push(token);
+    } else if (token.type === "PUNCTUATION" && token.value === ")") {
+      
+      while (operationStack.length > 0 && operationStack[operationStack.length - 1].value !== "(") {
+        output.push(operationStack.pop());
+      }
+      operationStack.pop(); 
+    } else if (token.type === "OPERATOR") {
+      while (
+        operationStack.length > 0 &&
+        operationStack[operationStack.length - 1].type === "OPERATOR" &&
+        precedence[operationStack[operationStack.length - 1].value] >= precedence[token.value]
+      ) {
+        output.push(operationStack.pop());
+      }
+      operationStack.push(token);
+    }
+  }
+
+  while (operationStack.length > 0) {
+    output.push(operationStack.pop());
+  }
+
+  return output;
+}
+
 function lynxCompiler(tokenList) {
   const program = [];
   let currentStack = [];
@@ -26,7 +67,7 @@ function lynxCompiler(tokenList) {
         program[i] = {
           type: "assignment",
           variableName: program[i][1].value,
-          expression: program[i].slice(3)
+          expression: parseExpression(program[i].slice(3))
         }
         break;
       case "consolePrint":

@@ -62,13 +62,14 @@ function LVMExec(bytecode) {
 }
 
 const program = [
-  { op: "PUSH", value: 10 },
-  { op: "PUSH", value: 20 },
-  { op: "MUL" },
-  { op: "STORE", name: "result" },
-  { op: "LOAD", value: "result" },
-  { op: "PRINT" },
-  { op: "HALT" },
+  { op: 'PUSH', value: 180 },
+  { op: 'PUSH', value: 12 },
+  { op: 'ADD' },
+  { op: 'STORE', name: 'height' },
+  { op: 'PUSH', value: 'Sahil Udar' },
+  { op: 'STORE', name: 'name' },
+  { op: 'LOAD', name: 'height' },
+  { op: 'PRINT' }
 ];
 
 LVMExec(program);

@@ -14,7 +14,7 @@ function parseExpression(tokens) {
   };
 
   for (let token of tokens) {
-    if (token.type === "NUMBER" || token.type === "IDENTIFIER") {
+    if (token.type === "NUMBER" || token.type === "IDENTIFIER" || token.type === "STRING") {
       output.push(token);
     } else if (token.type === "PUNCTUATION" && token.value === "(") {
       operationStack.push(token);

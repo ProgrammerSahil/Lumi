@@ -7,7 +7,7 @@ let input = `
 
 set name = "sahil udar"
 set cgpa = 8
-set randomExpression = (5+10)*10
+set randomExpression = (5+10)*cgpa
 consolePrint(randomExpression)
 consolePrint(name)
 

@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "LynxCompilerBackend",
   "main": "index.js",
-
   "type": "module",
   "scripts": {
     "testVM": "node LVM/LVMMain.js",
     "testTokenizer": "node Compiler/tokenizer.js",
-    "testCompiler" : "node Compiler/compiler.js",
-    "testbytecodeGen" : "node Compiler/bytecodeGenerator.js",
-    "test" : "node testing.js"
+    "testCompiler": "node Compiler/compiler.js",
+    "testbytecodeGen": "node Compiler/bytecodeGenerator.js",
+    "test": "node testing.js",
+    "server": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,10 @@
   "bugs": {
     "url": "https://github.com/ProgrammerSahil/Lynx/issues"
   },
-  "homepage": "https://github.com/ProgrammerSahil/Lynx#readme"
+  "homepage": "https://github.com/ProgrammerSahil/Lynx#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
 }

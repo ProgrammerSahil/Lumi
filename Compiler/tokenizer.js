@@ -15,6 +15,7 @@ function classifyToken(token) {
 }
 
 function lynxTokenizer(input) {
+  input = input.trim();
   const tokens = [];
   let currentToken = "";
   let inString = false;

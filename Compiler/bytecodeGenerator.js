@@ -7,6 +7,8 @@ function bytecodeGenerator(compiledCode) {
       for (let exp of compiledCode[pointer].expression) {
         if (exp.type === "NUMBER" || exp.type === "STRING") {
           bytecodeOutput.push({ op: "PUSH", value: exp.value });
+        } else if (exp.type === "IDENTIFIER") {
+          bytecodeOutput.push({ op: "LOAD", name: exp.value });
         } else if (exp.type === "OPERATOR") {
           switch (exp.value) {
             case "+":
@@ -45,7 +47,6 @@ function bytecodeGenerator(compiledCode) {
   }
 
   return bytecodeOutput;
-
 }
 
 export default bytecodeGenerator;

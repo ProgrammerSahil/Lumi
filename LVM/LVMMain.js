@@ -2,6 +2,7 @@ function LVMExec(bytecode) {
   const stack = [];
   const memory = {};
   let ip = 0;
+  const output = [];
 
   while (ip < bytecode.length) {
     const instr = bytecode[ip];
@@ -13,7 +14,7 @@ function LVMExec(bytecode) {
       case "ADD":
         let b = stack.pop();
         let a = stack.pop();
-        stack.push(a + b);
+        stack.push(Number(a) + Number(b));
         break;
       case "SUBTRACT":
         let y = stack.pop();
@@ -40,6 +41,7 @@ function LVMExec(bytecode) {
         break;
       case "PRINT":
         console.log(stack[stack.length - 1]);
+        output.push(stack[stack.length - 1]);
         break;
       case "STORE":
         const value = stack.pop();
@@ -59,6 +61,8 @@ function LVMExec(bytecode) {
 
     ip++;
   }
+
+  return output;
 }
 
 export default LVMExec;

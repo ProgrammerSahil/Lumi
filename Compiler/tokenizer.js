@@ -1,5 +1,5 @@
 const KEYWORDS = new Set(["set", "consolePrint"]);
-const OPERATORS = new Set(["=", "+", "-", "*", "/", "^"]);
+const OPERATORS = new Set(["=", "+", "-", "*", "/", "^", "<", ">"]);
 const PUNCTUATION = new Set(["(", ")"]);
 
 function classifyToken(token) {

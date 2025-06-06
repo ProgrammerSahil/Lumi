@@ -26,6 +26,24 @@ function bytecodeGenerator(compiledCode) {
             case "^":
               bytecodeOutput.push({ op: "POW" });
               break;
+            case "<":
+              bytecodeOutput.push({op: "LESSTHAN"});
+              break;
+            case ">":
+              bytecodeOutput.push({op: "GREATERTHAN"});
+              break;
+            case "==":
+              bytecodeOutput.push({op: "EQUALS"});
+              break;
+            case "<=":
+              bytecodeOutput.push({op: "LESSTHANEQUALS"});
+              break;
+            case ">=":
+              bytecodeOutput.push({op: "GREATERTHANEQUALS"});
+              break;
+            case "!=":
+              bytecodeOutput.push({op: "NOTEQUALS"});
+              break;
           }
         }
       }

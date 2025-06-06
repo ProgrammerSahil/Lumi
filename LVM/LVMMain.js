@@ -47,6 +47,37 @@ function LVMExec(bytecode) {
         const value = stack.pop();
         memory[instr.name] = value;
         break;
+      case "LESSTHAN":
+        const q = stack.pop();
+        const p = stack.pop();
+        stack.push(p<q);
+        break;
+      case "GREATERTHAN":
+        const val2 = stack.pop();
+        const val1 = stack.pop();
+        stack.push(val1>val2);
+        break;
+      case "EQUALS":
+        const val4 = stack.pop();
+        const val3 = stack.pop();
+        stack.push(val3===val4?true:false);
+        break;
+      case "LESSTHANEQUALS":
+        const val6 = stack.pop();
+        const val5 = stack.pop();
+        stack.push(val5<=val6);
+        break;
+      case "GREATERTHANEQUALS":
+        const val8 = stack.pop();
+        const val7 = stack.pop();
+        stack.push(val7>=val8);
+        break;
+      case "NOTEQUALS":
+        const val10 = stack.pop();
+        const val9 = stack.pop();
+        stack.push(val9!=val10);
+        break;
+
       case "LOAD":
         if (!(instr.name in memory)) {
           throw new Error(`Undeclared Variable: ${instr.name}`); 

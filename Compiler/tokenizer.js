@@ -1,5 +1,5 @@
 const KEYWORDS = new Set(["set", "consolePrint"]);
-const OPERATORS = new Set(["=", "+", "-", "*", "/", "^", "<", ">"]);
+const OPERATORS = new Set(["=", "+", "-", "*", "/", "^", "<", ">", "<=", ">=", "==", "!="]);
 const PUNCTUATION = new Set(["(", ")"]);
 
 function classifyToken(token) {
@@ -22,6 +22,8 @@ function lynxTokenizer(input) {
 
   for (let i = 0; i < input.length; i++) {
     const char = input[i];
+    const nextChar = input[i + 1];
+    const twoCharOp = char + nextChar;
 
     if (char === '"') {
       if (inString) {
@@ -43,14 +45,21 @@ function lynxTokenizer(input) {
       continue;
     }
 
-    if (OPERATORS.has(char) || PUNCTUATION.has(char)) {
+    if (["<=", ">=", "==", "!="].includes(twoCharOp)) {
+      if (currentToken.length > 0) {
+        tokens.push(classifyToken(currentToken));
+        currentToken = "";
+      }
+      tokens.push({ type: "OPERATOR", value: twoCharOp });
+      i++; // Skip next character too
+    } else if (OPERATORS.has(char) || PUNCTUATION.has(char)) {
       if (currentToken.length > 0) {
         tokens.push(classifyToken(currentToken));
         currentToken = "";
       }
       const type = OPERATORS.has(char) ? "OPERATOR" : "PUNCTUATION";
       tokens.push({ type, value: char });
-    } else if (/\s/.test(char)){
+    } else if (/\s/.test(char)) {
       if (currentToken.length > 0) {
         tokens.push(classifyToken(currentToken));
         currentToken = "";

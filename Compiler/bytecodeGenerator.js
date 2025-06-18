@@ -67,11 +67,21 @@ function bytecodeGenerator(compiledCode) {
     }
 
     else if (node.type === "functionCall") {
-      const parsedArgs = parseExpression(node.arguments);
-      const argBytecode = generateBytecodeFromExpression(parsedArgs);
-      bytecodeOutput.push(...argBytecode);
-      bytecodeOutput.push({ op: "PRINT" });  // Replace with a lookup if you add more function types
-    }
+  const parsedArgs = parseExpression(node.arguments);
+  const argBytecode = generateBytecodeFromExpression(parsedArgs);
+  bytecodeOutput.push(...argBytecode);
+
+  switch (node.functionName) {
+    case "consolePrint":
+      bytecodeOutput.push({ op: "PRINT" });
+      break;
+    case "exit":
+      bytecodeOutput.push({ op: "EXIT" });
+      break;
+    default:
+      throw new Error("Unknown function: " + node.functionName);
+  }
+}
 
     pointer++;
   }

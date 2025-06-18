@@ -18,7 +18,6 @@ function App() {
     setOutput('Compiling...')
 
     try {
-      console.log(code);
       const response = await fetch('http://localhost:3000/editor', {
         method: 'POST',
         headers: {
@@ -28,7 +27,6 @@ function App() {
       })
 
       const result = await response.json()
-      console.log(result);
       
       if (response.ok) {
         setOutput(result.output || 'Compilation successful (no output)')

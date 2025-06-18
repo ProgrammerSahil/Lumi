@@ -12,9 +12,13 @@ function LVMExec(bytecode) {
         stack.push(instr.value);
         break;
       case "ADD":
-        let b = stack.pop();
-        let a = stack.pop();
-        stack.push(Number(a) + Number(b));
+        const b = stack.pop();
+        const a = stack.pop();
+        if (typeof a === "string" || typeof b === "string") {
+          stack.push(String(a) + String(b));
+        } else {
+          stack.push(a + b);
+        }
         break;
       case "SUBTRACT":
         let y = stack.pop();
@@ -50,39 +54,39 @@ function LVMExec(bytecode) {
       case "LESSTHAN":
         const q = stack.pop();
         const p = stack.pop();
-        stack.push(p<q);
+        stack.push(p < q);
         break;
       case "GREATERTHAN":
         const val2 = stack.pop();
         const val1 = stack.pop();
-        stack.push(val1>val2);
+        stack.push(val1 > val2);
         break;
       case "EQUALS":
         const val4 = stack.pop();
         const val3 = stack.pop();
-        stack.push(val3===val4?true:false);
+        stack.push(val3 === val4 ? true : false);
         break;
       case "LESSTHANEQUALS":
         const val6 = stack.pop();
         const val5 = stack.pop();
-        stack.push(val5<=val6);
+        stack.push(val5 <= val6);
         break;
       case "GREATERTHANEQUALS":
         const val8 = stack.pop();
         const val7 = stack.pop();
-        stack.push(val7>=val8);
+        stack.push(val7 >= val8);
         break;
       case "NOTEQUALS":
         const val10 = stack.pop();
         const val9 = stack.pop();
-        stack.push(val9!=val10);
+        stack.push(val9 != val10);
         break;
 
       case "LOAD":
         if (!(instr.name in memory)) {
-          throw new Error(`Undeclared Variable: ${instr.name}`); 
+          throw new Error(`Undeclared Variable: ${instr.name}`);
         }
-        stack.push(memory[instr.name]); 
+        stack.push(memory[instr.name]);
         break;
       case "HALT":
         return;

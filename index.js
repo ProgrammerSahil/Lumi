@@ -4,7 +4,7 @@ import compilerRouter from "./Compiler/compilerRouter.js";
 
 const port = 3000;
 
-const app = express();
+export const app = express();
 
 app.use(cors());
 app.use(express.text());

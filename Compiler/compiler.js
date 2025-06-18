@@ -92,4 +92,4 @@ function lynxCompiler(tokenList) {
   return program;
 }
 
-export default lynxCompiler;
+export {lynxCompiler, parseExpression};

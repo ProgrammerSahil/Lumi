@@ -1,5 +1,5 @@
 import lynxTokenizer from "./tokenizer.js";
-import lynxCompiler from "./compiler.js";
+import {lynxCompiler} from "./compiler.js";
 import bytecodeGenerator from "./bytecodeGenerator.js";
 import LVMExec from "../LVM/LVMMain.js";
 

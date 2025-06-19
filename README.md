@@ -1,15 +1,15 @@
-# Lynx Programming Language 🐺
+# Lumi Programming Language 🌟
 
-A lightweight, stack-based programming language built from scratch in JavaScript. Lynx features a custom compiler pipeline that transforms source code into bytecode and executes it on a purpose-built virtual machine.
+A lightweight, stack-based programming language built from scratch in JavaScript. Lumi features a custom compiler pipeline that transforms source code into bytecode and executes it on a purpose-built virtual machine.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D14.0.0-brightgreen)](https://nodejs.org/)
-[![Status](https://img.shields.io/badge/status-active%20development-blue)](https://github.com/yourusername/lynx)
+[![Status](https://img.shields.io/badge/status-active%20development-blue)](https://github.com/yourusername/lumi)
 
 ## 🌟 Features
 
 - **Complete Compiler Pipeline**: Custom tokenizer, parser, and compiler
-- **Bytecode Virtual Machine**: Lynx VM executes compiled bytecode efficiently
+- **Bytecode Virtual Machine**: Lumi VM executes compiled bytecode efficiently
 - **RESTful API**: Express.js server for remote code execution
 - **Mathematical Operations**: Full arithmetic support (`+`, `-`, `*`, `/`, `^`)
 - **Variable System**: Dynamic variable assignment and retrieval
@@ -27,8 +27,8 @@ A lightweight, stack-based programming language built from scratch in JavaScript
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/lynx.git
-cd lynx
+git clone https://github.com/yourusername/lumi.git
+cd lumi
 ```
 
 2. Install dependencies:
@@ -45,12 +45,12 @@ node index.js
 
 The server will start on `http://localhost:3000`
 
-### Your First Lynx Program
+### Your First Lumi Program
 
 Send a POST request to `http://localhost:3000/editor` with the following content:
 
-```lynx
-consolePrint("Hello, Lynx!")
+```lumi
+consolePrint("Hello, Lumi!")
 set myNumber = 42
 set result = myNumber * 2
 consolePrint(result)
@@ -59,14 +59,14 @@ consolePrint(result)
 ## 📖 Language Syntax
 
 ### Variable Assignment
-```lynx
+```lumi
 set variableName = value
 set message = "Hello World"
 set number = 123
 ```
 
 ### Arithmetic Operations
-```lynx
+```lumi
 set sum = 10 + 5        # Addition
 set diff = 20 - 8       # Subtraction
 set product = 6 * 7     # Multiplication
@@ -75,7 +75,7 @@ set power = 2 ^ 8       # Exponentiation
 ```
 
 ### Output
-```lynx
+```lumi
 consolePrint("Text output")
 consolePrint(variableName)
 consolePrint(42)
@@ -120,14 +120,14 @@ consolePrint(finalLen)'
 ## 📁 Project Structure
 
 ```
-Lynx/
+Lumi/
 ├── Compiler/
 │   ├── tokenizer.js        # Lexical analysis
 │   ├── parser.js           # Syntax analysis  
 │   ├── compiler.js         # Code generation
 │   └── compilerRouter.js   # Express routes
 ├── VM/
-│   └── LVMMain.js         # Lynx Virtual Machine
+│   └── LVMMain.js         # Lumi Virtual Machine
 ├── bytecodeGenerator.js    # Bytecode utilities
 ├── index.js               # Main server file
 ├── package.json
@@ -141,11 +141,11 @@ Lynx/
 1. **Tokenization**: Source code → tokens
 2. **Parsing**: Tokens → Abstract Syntax Tree (AST)
 3. **Compilation**: AST → bytecode
-4. **Execution**: Bytecode → Lynx VM → output
+4. **Execution**: Bytecode → Lumi VM → output
 
 ### Virtual Machine
 
-The Lynx VM is a stack-based interpreter that executes bytecode instructions:
+The Lumi VM is a stack-based interpreter that executes bytecode instructions:
 - **Stack Management**: Push/pop operations
 - **Memory Management**: Variable storage and retrieval
 - **Instruction Dispatch**: Bytecode instruction execution
@@ -207,7 +207,7 @@ We welcome contributions! Here's how you can help:
 ## 📝 Examples
 
 ### Basic Calculator
-```lynx
+```lumi
 set a = 10
 set b = 5
 consolePrint("Addition:")
@@ -219,8 +219,8 @@ consolePrint(a ^ 2)
 ```
 
 ### Variable Manipulation
-```lynx
-set name = "Lynx"
+```lumi
+set name = "Lumi"
 set version = 1.0
 set description = "Programming Language"
 consolePrint(name)

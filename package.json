@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ProgrammerSahil/Lynx.git"
+    "url": "git+https://github.com/ProgrammerSahil/Lumi.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ProgrammerSahil/Lynx/issues"
+    "url": "https://github.com/ProgrammerSahil/Lumi/issues"
   },
-  "homepage": "https://github.com/ProgrammerSahil/Lynx#readme",
+  "homepage": "https://github.com/ProgrammerSahil/Lumi#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",

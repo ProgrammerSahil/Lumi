@@ -1,13 +1,13 @@
-import lynxTokenizer from "./tokenizer.js";
-import {lynxCompiler} from "./compiler.js";
+import lumiTokenizer from "./tokenizer.js";
+import {lumiCompiler} from "./compiler.js";
 import bytecodeGenerator from "./bytecodeGenerator.js";
 import LVMExec from "../LVM/LVMMain.js";
 
 
 
 function controller(input){
-    const tokenizerOutput = lynxTokenizer(input);
-    const compilerOutput = lynxCompiler(tokenizerOutput);
+    const tokenizerOutput = lumiTokenizer(input);
+    const compilerOutput = lumiCompiler(tokenizerOutput);
     const bytecodeOutput = bytecodeGenerator(compilerOutput);
     const LVMConsole = LVMExec(bytecodeOutput);
     return LVMConsole;

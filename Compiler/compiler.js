@@ -53,7 +53,7 @@ function parseExpression(tokens) {
   return output;
 }
 
-function lynxCompiler(tokenList) {
+function lumiCompiler(tokenList) {
   const program = [];
   let currentStack = [];
 
@@ -92,4 +92,4 @@ function lynxCompiler(tokenList) {
   return program;
 }
 
-export {lynxCompiler, parseExpression};
+export {lumiCompiler, parseExpression};

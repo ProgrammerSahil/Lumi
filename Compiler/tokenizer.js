@@ -14,7 +14,7 @@ function classifyToken(token) {
   }
 }
 
-function lynxTokenizer(input) {
+function lumiTokenizer(input) {
   input = input.trim();
   const tokens = [];
   let currentToken = "";
@@ -76,4 +76,4 @@ function lynxTokenizer(input) {
   return tokens;
 }
 
-export default lynxTokenizer;
+export default lumiTokenizer;

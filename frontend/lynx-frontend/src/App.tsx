@@ -44,7 +44,7 @@ function App() {
 
   return (
     <>
-      <h1 className="compilerHeader">Lynx Compiler</h1>
+      <h1 className="compilerHeader">Lumi Compiler</h1>
       <div className="mainContainer">
         <div className="editorSection">
           <h3>Source Code</h3>
@@ -55,7 +55,7 @@ function App() {
             rows={20}
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            placeholder="Enter Lynx code here..."
+            placeholder="Enter Lumi code here..."
             spellCheck="false"
           />
           <button 

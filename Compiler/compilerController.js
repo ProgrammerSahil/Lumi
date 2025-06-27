@@ -10,7 +10,6 @@ function controller(input){
     const compilerOutput = lumiCompiler(tokenizerOutput);
     const bytecodeOutput = bytecodeGenerator(compilerOutput);
     const LVMConsole = LVMExec(bytecodeOutput);
-    console.log(bytecodeOutput);
     return LVMConsole;
 }
 

@@ -177,33 +177,117 @@ function lumiCompiler(tokenList) {
           i = loopBodyEnd + 2;
           break;
 
+        case "if":
+          
+          let ifCondStart = i + 2; 
+          let ifCondEnd = ifCondStart;
+          let ifParenCount = 1;
+
+          while (ifParenCount > 0 && ifCondEnd < tokenList.length) {
+            ifCondEnd++;
+            if (tokenList[ifCondEnd].value === "(") ifParenCount++;
+            else if (tokenList[ifCondEnd].value === ")") ifParenCount--;
+          }
+
+          const ifCondition = tokenList.slice(ifCondStart, ifCondEnd);
+
+   
+          let ifBraceCount = 0;
+          let ifBodyStart = ifCondEnd + 2;
+          let ifBodyEnd = ifBodyStart;
+
+          for (let j = ifBodyStart; j < tokenList.length; j++) {
+            if (tokenList[j].value === "{") ifBraceCount++;
+            else if (tokenList[j].value === "}") {
+              ifBraceCount--;
+              if (ifBraceCount === -1) {
+                ifBodyEnd = j - 1;
+                break;
+              }
+            }
+          }
+
+          const ifBodyStatements = parseBlock(tokenList, ifBodyStart, ifBodyEnd);
+          const compiledIfBody = [];
+
+          for (let stmt of ifBodyStatements) {
+            compiledIfBody.push(...lumiCompiler(stmt));
+          }
+
+          program.push({
+            type: "ifStatement",
+            condition: parseExpression(ifCondition),
+            body: compiledIfBody,
+          });
+
+          i = ifBodyEnd + 2;
+          break;
+
         case "set":
+          let statementEnd = i + 1;
+          while (statementEnd < tokenList.length && 
+                 tokenList[statementEnd].type !== "KEYWORD") {
+            statementEnd++;
+          }
+          let assignPos = i + 2;
+          while (assignPos < statementEnd && 
+                 (tokenList[assignPos].type !== "OPERATOR" || tokenList[assignPos].value !== "=")) {
+            assignPos++;
+          }
+          
+          if (assignPos >= statementEnd) {
+            throw new Error("Assignment operator '=' not found in set statement");
+          }
+          
+          const expressionTokens = tokenList.slice(assignPos + 1, statementEnd);
+          
           program.push({
             type: "assignment",
             variableName: tokenList[i + 1].value,
-            expression: parseExpression(tokenList.slice(i + 3)),
+            expression: parseExpression(expressionTokens),
           });
-          i = tokenList.length;
+          
+          i = statementEnd; 
           break;
 
         case "consolePrint":
-          program.push({
-            type: "functionCall",
-            functionName: "consolePrint",
-            arguments: tokenList.slice(i + 2, tokenList.length - 1),
-          });
-          i = tokenList.length;
+          let printEnd = i + 1;
+          while (printEnd < tokenList.length && 
+                 tokenList[printEnd].type !== "KEYWORD") {
+            printEnd++;
+          }
+          
+          let argStart = i + 2; 
+          let argEnd = printEnd - 1; 
+          
+          if (tokenList[i + 1].value === "(" && tokenList[argEnd].value === ")") {
+            program.push({
+              type: "functionCall",
+              functionName: "consolePrint",
+              arguments: tokenList.slice(argStart, argEnd),
+            });
+          } else {
+            throw new Error("Invalid consolePrint syntax");
+          }
+          
+          i = printEnd;
           break;
 
         case "return":
+          let returnEnd = i + 1;
+          while (returnEnd < tokenList.length && 
+                 tokenList[returnEnd].type !== "KEYWORD" &&
+                 !(tokenList[returnEnd].type === "PUNCTUATION" && tokenList[returnEnd].value === "}")) {
+            returnEnd++;
+          }
+
           program.push({
             type: "return",
-            expression:
-              tokenList.length > i + 1
-                ? parseExpression(tokenList.slice(i + 1))
-                : [],
+            expression: returnEnd > i + 1 ? parseExpression(tokenList.slice(i + 1, returnEnd)) : [],
           });
-          return program;
+          
+          i = returnEnd;
+          break;
 
         default:
           i++;
@@ -211,7 +295,6 @@ function lumiCompiler(tokenList) {
     } else if (token.type === "IDENTIFIER") {
       const nextToken = tokenList[i + 1];
 
-      // Check for function call syntax like: hi()
       if (
         nextToken &&
         nextToken.type === "PUNCTUATION" &&

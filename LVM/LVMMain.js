@@ -50,7 +50,7 @@ function LVMExec(bytecode) {
                 break;
                 
             case "PRINT":
-                const printValue = stack[stack.length - 1];
+                const printValue = stack.pop();
                 console.log(printValue);
                 output.push(printValue);
                 break;
@@ -124,11 +124,9 @@ function LVMExec(bytecode) {
             case "DEFINE_FUNCTION":
                 functions[instr.name] = {
                     parameters: instr.parameters,
-                    startAddress: instr.startAddress,
-                    endAddress: instr.endAddress
+                    startAddress: instr.startAddress
                 };
-                ip = instr.endAddress + 1; 
-                continue; 
+                break;
                 
             case "CALL_FUNCTION":
                 if (!(instr.name in functions)) {
@@ -138,18 +136,15 @@ function LVMExec(bytecode) {
                 const func = functions[instr.name];
                 const args = [];
                 
-               
                 for (let i = 0; i < func.parameters.length; i++) {
                     args.unshift(stack.pop());
                 }
                 
-       
                 callStack.push({
                     returnAddress: ip + 1,
                     localMemory: { ...memory }
                 });
                 
-              
                 for (let i = 0; i < func.parameters.length; i++) {
                     memory[func.parameters[i]] = args[i];
                 }
@@ -159,16 +154,13 @@ function LVMExec(bytecode) {
                 
             case "RETURN":
                 if (callStack.length === 0) {
-              
                     return output;
                 }
                 
                 const returnValue = stack.length > 0 ? stack.pop() : undefined;
                 const callFrame = callStack.pop();
                 
-                
                 Object.assign(memory, callFrame.localMemory);
-                
                 
                 if (returnValue !== undefined) {
                     stack.push(returnValue);

@@ -1,5 +1,5 @@
 const KEYWORDS = new Set([
-    "set", "consolePrint", "function", "return", 
+    "set", "consolePrint", "function", "return",
     "while", "for", "if", "else", "break", "continue"
 ]);
 const OPERATORS = new Set(["=", "+", "-", "*", "/", "^", "<", ">", "<=", ">=", "==", "!="]);
@@ -79,4 +79,4 @@ function lumiTokenizer(input) {
     return tokens;
 }
 
-export default lumiTokenizer;
+export default lumiTokenizer

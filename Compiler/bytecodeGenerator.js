@@ -31,54 +31,13 @@ function generateBytecodeFromExpression(expression) {
 
 function bytecodeGenerator(compiledCode) {
     const bytecodeOutput = [];
-    let addressCounter = 0;
-    
- 
-    function calculateAddresses(nodes) {
-        for (let node of nodes) {
-            if (node.type === "functionDefinition") {
-                node.startAddress = addressCounter + 1;
-                addressCounter += calculateNodeSize(node);
-                node.endAddress = addressCounter - 1;
-            } else if (node.type === "whileLoop") {
-                node.conditionAddress = addressCounter;
-                addressCounter += calculateExpressionSize(node.condition) + 1; 
-                node.bodyStartAddress = addressCounter;
-                addressCounter += calculateNodesSize(node.body);
-                node.bodyEndAddress = addressCounter;
-                addressCounter += 1; 
-            } else {
-                addressCounter += calculateNodeSize(node);
-            }
-        }
-    }
-    
-    function calculateNodeSize(node) {
-        switch (node.type) {
-            case "assignment":
-                return calculateExpressionSize(node.expression) + 1;
-            case "functionCall":
-                return calculateExpressionSize(node.arguments) + 1;
-            case "return":
-                return calculateExpressionSize(node.expression) + 1;
-            case "functionDefinition":
-                return 1 + calculateNodesSize(node.body) + 1; 
-            default:
-                return 1;
-        }
-    }
-    
-    function calculateExpressionSize(expr) {
-        return expr.length;
-    }
-    
-    function calculateNodesSize(nodes) {
-        return nodes.reduce((sum, node) => sum + calculateNodeSize(node), 0);
-    }
-    
-    calculateAddresses(compiledCode);
     
 
+    if (!compiledCode || !Array.isArray(compiledCode)) {
+        console.warn("compiledCode is not an array:", compiledCode);
+        return bytecodeOutput;
+    }
+    
     for (let node of compiledCode) {
         switch (node.type) {
             case "assignment":
@@ -93,7 +52,6 @@ function bytecodeGenerator(compiledCode) {
                     bytecodeOutput.push(...argBytecode);
                     bytecodeOutput.push({ op: "PRINT" });
                 } else {
-      
                     const argBytecode = generateBytecodeFromExpression(parseExpression(node.arguments));
                     bytecodeOutput.push(...argBytecode);
                     bytecodeOutput.push({ op: "CALL_FUNCTION", name: node.functionName });
@@ -105,41 +63,65 @@ function bytecodeGenerator(compiledCode) {
                     op: "DEFINE_FUNCTION",
                     name: node.name,
                     parameters: node.parameters,
-                    startAddress: node.startAddress,
-                    endAddress: node.endAddress
+                    startAddress: bytecodeOutput.length + 2 
                 });
                 
-
+             
+                const jumpOverFunction = bytecodeOutput.length;
+                bytecodeOutput.push({ op: "JUMP", address: 0 }); 
+                
+             
                 const bodyBytecode = bytecodeGenerator(node.body);
                 bytecodeOutput.push(...bodyBytecode);
 
-                if (bodyBytecode.length === 0 || bodyBytecode[bodyBytecode.length - 1].op !== "RETURN") {
-                    bytecodeOutput.push({ op: "RETURN" });
-                }
+
+                
+             
+                bytecodeOutput[jumpOverFunction].address = bytecodeOutput.length;
                 break;
                 
             case "whileLoop":
-        
+                const conditionStart = bytecodeOutput.length;
                 const conditionBytecode = generateBytecodeFromExpression(node.condition);
                 bytecodeOutput.push(...conditionBytecode);
                 
                 const jumpIfFalseAddress = bytecodeOutput.length;
-                bytecodeOutput.push({ op: "JUMP_IF_FALSE", address: 0 }); 
+                bytecodeOutput.push({ op: "JUMP_IF_FALSE", address: 0 });
                 
-                const bodyStartAddress = bytecodeOutput.length;
                 const loopBodyBytecode = bytecodeGenerator(node.body);
                 bytecodeOutput.push(...loopBodyBytecode);
                 
-                const conditionStartAddress = jumpIfFalseAddress - conditionBytecode.length;
-                bytecodeOutput.push({ op: "JUMP", address: conditionStartAddress });
+                bytecodeOutput.push({ op: "JUMP", address: conditionStart });
                 
                 bytecodeOutput[jumpIfFalseAddress].address = bytecodeOutput.length;
+                break;
+                
+            case "ifStatement":
+        
+                const ifConditionBytecode = generateBytecodeFromExpression(node.condition);
+                bytecodeOutput.push(...ifConditionBytecode);
+                
+
+                const jumpIfFalseIdx = bytecodeOutput.length;
+                bytecodeOutput.push({ op: "JUMP_IF_FALSE", address: 0 });
+                
+
+                const ifBodyBytecode = bytecodeGenerator(node.body);
+                bytecodeOutput.push(...ifBodyBytecode);
+                
+
+
+                bytecodeOutput[jumpIfFalseIdx].address = bytecodeOutput.length;
                 break;
                 
             case "return":
                 const returnBytecode = generateBytecodeFromExpression(node.expression);
                 bytecodeOutput.push(...returnBytecode);
                 bytecodeOutput.push({ op: "RETURN" });
+                break;
+                
+            default:
+                console.warn("Unknown node type:", node.type);
                 break;
         }
     }

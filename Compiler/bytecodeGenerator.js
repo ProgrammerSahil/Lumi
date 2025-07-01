@@ -25,7 +25,7 @@ function generateBytecodeFromExpression(expression) {
             }
         }
     }
-    
+
     return bytecode;
 }
 
@@ -59,24 +59,29 @@ function bytecodeGenerator(compiledCode) {
                 break;
                 
             case "functionDefinition":
+               
+                const functionBodyStart = bytecodeOutput.length + 2; 
+                
                 bytecodeOutput.push({
                     op: "DEFINE_FUNCTION",
                     name: node.name,
                     parameters: node.parameters,
-                    startAddress: bytecodeOutput.length + 2 
+                    startAddress: functionBodyStart
                 });
                 
-             
+               
                 const jumpOverFunction = bytecodeOutput.length;
                 bytecodeOutput.push({ op: "JUMP", address: 0 }); 
                 
-             
+               
                 const bodyBytecode = bytecodeGenerator(node.body);
                 bytecodeOutput.push(...bodyBytecode);
-
-
                 
-             
+               
+                if (bodyBytecode.length === 0 || bodyBytecode[bodyBytecode.length - 1].op !== "RETURN") {
+                    bytecodeOutput.push({ op: "RETURN" });
+                }
+                
                 bytecodeOutput[jumpOverFunction].address = bytecodeOutput.length;
                 break;
                 
@@ -84,7 +89,6 @@ function bytecodeGenerator(compiledCode) {
                 const conditionStart = bytecodeOutput.length;
                 const conditionBytecode = generateBytecodeFromExpression(node.condition);
                 bytecodeOutput.push(...conditionBytecode);
-                
                 const jumpIfFalseAddress = bytecodeOutput.length;
                 bytecodeOutput.push({ op: "JUMP_IF_FALSE", address: 0 });
                 
@@ -97,20 +101,15 @@ function bytecodeGenerator(compiledCode) {
                 break;
                 
             case "ifStatement":
-        
                 const ifConditionBytecode = generateBytecodeFromExpression(node.condition);
                 bytecodeOutput.push(...ifConditionBytecode);
                 
-
                 const jumpIfFalseIdx = bytecodeOutput.length;
                 bytecodeOutput.push({ op: "JUMP_IF_FALSE", address: 0 });
                 
-
                 const ifBodyBytecode = bytecodeGenerator(node.body);
                 bytecodeOutput.push(...ifBodyBytecode);
                 
-
-
                 bytecodeOutput[jumpIfFalseIdx].address = bytecodeOutput.length;
                 break;
                 

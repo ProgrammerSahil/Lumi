@@ -178,7 +178,7 @@ function lumiCompiler(tokenList) {
           break;
 
         case "if":
-          
+      
           let ifCondStart = i + 2; 
           let ifCondEnd = ifCondStart;
           let ifParenCount = 1;
@@ -191,7 +191,6 @@ function lumiCompiler(tokenList) {
 
           const ifCondition = tokenList.slice(ifCondStart, ifCondEnd);
 
-   
           let ifBraceCount = 0;
           let ifBodyStart = ifCondEnd + 2;
           let ifBodyEnd = ifBodyStart;
@@ -214,13 +213,48 @@ function lumiCompiler(tokenList) {
             compiledIfBody.push(...lumiCompiler(stmt));
           }
 
+         
+          let nextTokenIndex = ifBodyEnd + 2;
+          let elseBody = [];
+          
+          if (nextTokenIndex < tokenList.length && 
+              tokenList[nextTokenIndex].type === "KEYWORD" && 
+              tokenList[nextTokenIndex].value === "else") {
+            
+            
+            let elseBraceCount = 0;
+            let elseBodyStart = nextTokenIndex + 2; 
+            let elseBodyEnd = elseBodyStart;
+
+            for (let j = elseBodyStart; j < tokenList.length; j++) {
+              if (tokenList[j].value === "{") elseBraceCount++;
+              else if (tokenList[j].value === "}") {
+                elseBraceCount--;
+                if (elseBraceCount === -1) {
+                  elseBodyEnd = j - 1;
+                  break;
+                }
+              }
+            }
+
+            const elseBodyStatements = parseBlock(tokenList, elseBodyStart, elseBodyEnd);
+            
+            for (let stmt of elseBodyStatements) {
+              elseBody.push(...lumiCompiler(stmt));
+            }
+
+            i = elseBodyEnd + 2; 
+          } else {
+            i = ifBodyEnd + 2; 
+          }
+
           program.push({
-            type: "ifStatement",
+            type: "ifElseStatement",
             condition: parseExpression(ifCondition),
-            body: compiledIfBody,
+            ifBody: compiledIfBody,
+            elseBody: elseBody,
           });
 
-          i = ifBodyEnd + 2;
           break;
 
         case "set":

@@ -113,6 +113,34 @@ function bytecodeGenerator(compiledCode) {
                 bytecodeOutput[jumpIfFalseIdx].address = bytecodeOutput.length;
                 break;
                 
+            case "ifElseStatement":
+                
+                const ifElseConditionBytecode = generateBytecodeFromExpression(node.condition);
+                bytecodeOutput.push(...ifElseConditionBytecode);
+                
+                
+                const jumpToElseIdx = bytecodeOutput.length;
+                bytecodeOutput.push({ op: "JUMP_IF_FALSE", address: 0 });
+                
+                
+                const ifElseIfBodyBytecode = bytecodeGenerator(node.ifBody);
+                bytecodeOutput.push(...ifElseIfBodyBytecode);
+                
+                
+                const jumpOverElseIdx = bytecodeOutput.length;
+                bytecodeOutput.push({ op: "JUMP", address: 0 });
+                
+              
+                bytecodeOutput[jumpToElseIdx].address = bytecodeOutput.length;
+                
+       
+                const elseBodyBytecode = bytecodeGenerator(node.elseBody);
+                bytecodeOutput.push(...elseBodyBytecode);
+                
+                
+                bytecodeOutput[jumpOverElseIdx].address = bytecodeOutput.length;
+                break;
+                
             case "return":
                 const returnBytecode = generateBytecodeFromExpression(node.expression);
                 bytecodeOutput.push(...returnBytecode);

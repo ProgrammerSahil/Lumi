@@ -1,21 +1,21 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
 
 function App() {
-  const [code, setCode] = useState('')
-  const [output, setOutput] = useState('')
-  const [isCompiling, setIsCompiling] = useState(false)
-  const [error, setError] = useState('')
+  const [code, setCode] = useState('');
+  const [output, setOutput] = useState('');
+  const [isCompiling, setIsCompiling] = useState(false);
+  const [error, setError] = useState('');
 
   const compileCode = async () => {
     if (!code.trim()) {
-      setError('Please enter some code to compile')
-      return
+      setError('Please enter some code to compile');
+      return;
     }
 
-    setIsCompiling(true)
-    setError('')
-    setOutput('Compiling...')
+    setIsCompiling(true);
+    setError('');
+    setOutput('Compiling...');
 
     try {
       const response = await fetch('http://localhost:3000/editor', {
@@ -23,24 +23,28 @@ function App() {
         headers: {
           'Content-Type': 'text/plain',
         },
-        body: code
-      })
+        body: code,
+      });
 
-      const result = await response.json()
-      
+      const result = await response.json();
+
       if (response.ok) {
-        setOutput(result.output || 'Compilation successful (no output)')
+        // Check if output is an array and join with newlines, otherwise use as is
+        const formattedOutput = Array.isArray(result.output)
+          ? result.output.join('\n')
+          : result.output || 'Compilation successful (no output)';
+        setOutput(formattedOutput);
       } else {
-        setError(result.error || 'Compilation failed')
-        setOutput('')
+        setError(result.error || 'Compilation failed');
+        setOutput('');
       }
     } catch (err) {
-      setError('Failed to connect to compiler service')
-      setOutput('')
+      setError('Failed to connect to compiler service');
+      setOutput('');
     } finally {
-      setIsCompiling(false)
+      setIsCompiling(false);
     }
-  }
+  };
 
   return (
     <>
@@ -48,9 +52,9 @@ function App() {
       <div className="mainContainer">
         <div className="editorSection">
           <h3>Source Code</h3>
-          <textarea 
-            name="code" 
-            id="code" 
+          <textarea
+            name="code"
+            id="code"
             className="sourceCodeContainer"
             rows={20}
             value={code}
@@ -58,28 +62,28 @@ function App() {
             placeholder="Enter Lumi code here..."
             spellCheck="false"
           />
-          <button 
-            className="compileButton" 
+          <button
+            className="compileButton"
             onClick={compileCode}
             disabled={isCompiling}
           >
             {isCompiling ? 'Compiling...' : 'Compile & Run'}
           </button>
         </div>
-        
+
         <div className="outputSection">
           <h3>Output</h3>
           <div className="outputContainer">
             {error ? (
               <div className="errorOutput">{error}</div>
             ) : (
-              <pre className="codeOutput">{output || ''}</pre>
+              <pre className="codeOutput">{output}</pre>
             )}
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
